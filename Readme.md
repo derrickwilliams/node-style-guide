@@ -110,7 +110,7 @@ while (keys.length) {
 var someVarInThaMiddle = 'improperly placed var';
 
 if (someVarInThaMiddle) {
-  ...
+  // ...
 }
 ```
 
@@ -422,9 +422,8 @@ setTimeout(function() {
 
 ## Use slashes for comments
 
-Use slashes for both single line and multi line comments. Try to write
-comments that explain higher level mechanisms or clarify difficult
-segments of your code. Don't use comments to restate trivial things.
+Write comments that explain higher level mechanisms or clarify difficult
+segments of your code. DONT'T USE COMMENTS TO RESTATE TRIVIAL THINGS. (Hint: use a well-named method instead)
 
 *Right:*
 
@@ -463,17 +462,3 @@ if (isSessionValid) {
   // ...
 }
 ```
-
-## Object.freeze, Object.preventExtensions, Object.seal, with, eval
-
-Crazy shit that you will probably never need. Stay away from it.
-
-## Getters and setters
-
-Do not use setters, they cause more problems for people who try to use your
-software than they can solve.
-
-Feel free to use getters that are free from [side effects][sideeffect], like
-providing a length property for a collection class.
-
-[sideeffect]: http://en.wikipedia.org/wiki/Side_effect_(computer_science)
