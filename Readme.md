@@ -82,14 +82,11 @@ if (true)
 
 Also, notice the use of whitespace before and after the condition statement.
 
-## Declare one variable per var statement
+## Declare variables at scope level (function level)
 
-Declare one variable per var statement, it makes it easier to re-order the
-lines. However, ignore [Crockford][crockfordconvention] when it comes to
-declaring variables deeper inside a function, just the declarations wherever
-they make sense.
+Declare variable using a single var at the top of function definition.
 
-*Right:*
+*Wrong:*
 
 ```js
 var keys   = ['foo', 'bar'];
@@ -102,7 +99,22 @@ while (keys.length) {
 }
 ```
 
-*Wrong:*
+*Really Wrong!*
+```js
+var keys = ['foo', 'bar'];
+while (keys.length) {
+  var key = keys.pop();
+  // do something
+}
+
+var someVarInThaMiddle = 'improperly placed var';
+
+if (someVarInThaMiddle) {
+  ...
+}
+```
+
+*Right:*
 
 ```js
 var keys = ['foo', 'bar'],
@@ -187,7 +199,7 @@ File.fullPermissions = 0777;
 
 ## Object / Array creation
 
-Use trailing commas and put *short* declarations on a single line. Only quote
+Put *short* declarations on a single line. Only quote
 keys when your interpreter complains:
 
 *Right:*
@@ -196,7 +208,7 @@ keys when your interpreter complains:
 var a = ['hello', 'world'];
 var b = {
   good: 'code',
-  'is generally': 'pretty',
+  'is generally': 'pretty'
 };
 ```
 
@@ -206,10 +218,14 @@ var b = {
 var a = [
   'hello', 'world'
 ];
-var b = {"good": 'code'
-        , is generally: 'pretty'
-        };
+var b = {
+  "good": 'code',
+  is generally: 'pretty'
+};
 ```
+
+(be carefule of [reserved keywords][jskeywords] too (class, long, float...)
+[jskeywords]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Reserved_Words
 
 ## Use the === operator
 
