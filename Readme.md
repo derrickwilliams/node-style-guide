@@ -116,10 +116,12 @@ if (someVarInThaMiddle) {
 *Right:*
 
 ```js
-var keys = ['foo', 'bar'],
-    values = [23, 42],
-    object = {},
-    key;
+// for multiple new variables start a new line after `var` followed by a single indent
+var 
+  keys = ['foo', 'bar'],
+  values = [23, 42],
+  object = {},
+  key;
 
 while (keys.length) {
   key = keys.pop();
@@ -252,11 +254,11 @@ if (a == '') {
 
 [comparisonoperators]: https://developer.mozilla.org/en/JavaScript/Reference/Operators/Comparison_Operators
 
-## Use multi-line ternary operator
+## Do not use multi-line ternary operator
 
-The ternary operator should not be used on a single line. Split it up into multiple lines instead.
+The ternary operator should not be used on multiple lines. If the condition is complex enough to encourage the use of multiple lines, use a regular if/else pattern.
 
-*Right:*
+*Wrong:*
 
 ```js
 var foo = (a === b)
@@ -264,7 +266,7 @@ var foo = (a === b)
   : 2;
 ```
 
-*Wrong:*
+*Right:*
 
 ```js
 var foo = (a === b) ? 1 : 2;
@@ -273,7 +275,7 @@ var foo = (a === b) ? 1 : 2;
 ## Do not extend built-in prototypes
 
 Do not extend the prototype of native JavaScript objects. Your future self will
-be forever grateful.
+be forever grateful. The use of utility libraries like underscore or lodash is preferred.
 
 *Right:*
 
@@ -301,6 +303,14 @@ if (a.empty()) {
 
 Any non-trivial conditions should be assigned to a descriptively named variable or function:
 
+*Wrong:*
+
+```js
+if (password.length >= 4 && /^(?=.*\d).{4,}$/.test(password)) {
+  console.log('losing');
+}
+```
+
 *Right:*
 
 ```js
@@ -308,14 +318,6 @@ var isValidPassword = password.length >= 4 && /^(?=.*\d).{4,}$/.test(password);
 
 if (isValidPassword) {
   console.log('winning');
-}
-```
-
-*Wrong:*
-
-```js
-if (password.length >= 4 && /^(?=.*\d).{4,}$/.test(password)) {
-  console.log('losing');
 }
 ```
 
@@ -329,22 +331,6 @@ perfect vision and limit yourself to ~15 lines of code per function.
 
 To avoid deep nesting of if-statements, always return a function's value as early
 as possible.
-
-*Right:*
-
-```js
-function isPercentage(val) {
-  if (val < 0) {
-    return false;
-  }
-
-  if (val > 100) {
-    return false;
-  }
-
-  return true;
-}
-```
 
 *Wrong:*
 
@@ -362,6 +348,23 @@ function isPercentage(val) {
 }
 ```
 
+*Right:*
+
+```js
+function isPercentage(val) {
+  if (val < 0) {
+    return false;
+  }
+
+  if (val > 100) {
+    return false;
+  }
+
+  return true;
+}
+```
+
+
 Or for this particular example it may also be fine to shorten things even
 further:
 
@@ -377,14 +380,6 @@ function isPercentage(val) {
 Feel free to give your closures a name. It shows that you care about them, and
 will produce better stack traces, heap and cpu profiles.
 
-*Right:*
-
-```js
-req.on('end', function onEnd() {
-  console.log('winning');
-});
-```
-
 *Wrong:*
 
 ```js
@@ -393,9 +388,27 @@ req.on('end', function() {
 });
 ```
 
+*Right:*
+
+```js
+req.on('end', function onEnd() {
+  console.log('winning');
+});
+```
+
 ## No nested closures
 
 Use closures, but don't nest them. Otherwise your code will become a mess.
+
+*Wrong:*
+
+```js
+setTimeout(function() {
+  client.connect(function() {
+    console.log('losing');
+  });
+}, 1000);
+```
 
 *Right:*
 
@@ -409,39 +422,10 @@ function afterConnect() {
 }
 ```
 
-*Wrong:*
-
-```js
-setTimeout(function() {
-  client.connect(function() {
-    console.log('losing');
-  });
-}, 1000);
-```
-
-## Use slashes for comments
+## Use appropriate comments, WHEN APPROPRIATE
 
 Write comments that explain higher level mechanisms or clarify difficult
 segments of your code. DONT'T USE COMMENTS TO RESTATE TRIVIAL THINGS. (Hint: use a well-named method instead)
-
-*Right:*
-
-```js
-// 'ID_SOMETHING=VALUE' -> ['ID_SOMETHING=VALUE'', 'SOMETHING', 'VALUE']
-var matches = item.match(/ID_([^\n]+)=([^\n]+)/));
-
-// This function has a nasty side effect where a failure to increment a
-// redis counter used for statistics will cause an exception. This needs
-// to be fixed in a later iteration.
-function loadUser(id, cb) {
-  // ...
-}
-
-var isSessionValid = (session.expires < Date.now());
-if (isSessionValid) {
-  // ...
-}
-```
 
 *Wrong:*
 
@@ -457,6 +441,25 @@ function loadUser(id, cb) {
 // Check if the session is valid
 var isSessionValid = (session.expires < Date.now());
 // If the session is valid
+if (isSessionValid) {
+  // ...
+}
+```
+
+*Right:*
+
+```js
+// 'ID_SOMETHING=VALUE' -> ['ID_SOMETHING=VALUE'', 'SOMETHING', 'VALUE']
+var matches = item.match(/ID_([^\n]+)=([^\n]+)/));
+
+// This function has a nasty side effect where a failure to increment a
+// redis counter used for statistics will cause an exception. This needs
+// to be fixed in a later iteration.
+function loadUser(id, cb) {
+  // ...
+}
+
+var isSessionValid = (session.expires < Date.now());
 if (isSessionValid) {
   // ...
 }
